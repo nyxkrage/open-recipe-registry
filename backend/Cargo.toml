@@ -1,5 +1,5 @@
 [package]
-name = "backend_server"
+name = "orr_server"
 version = "1.0.0"
 authors = ["carsten"]
 edition = "2018"
