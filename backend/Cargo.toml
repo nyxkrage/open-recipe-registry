@@ -1,0 +1,13 @@
+[package]
+name = "backend_server"
+version = "1.0.0"
+authors = ["carsten"]
+edition = "2018"
+default-run = "main"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = { git = "https://github.com/SergioBenitez/Rocket", branch = "master", default-features = false }
+rocket_lamb = { git = "https://github.com/nyxiative/rocket-lamb", branch = "rocket-0.5" }
+tokio = { version = "1", features = ["full"] }
