@@ -2,6 +2,17 @@
 This is a collaborative and contribution based recipe site. It uses a similar model to [Wikipedia](https://en.wikipedia.org/) where users can contribute changes to the recipes.  
 It will feature a focus on contributers proficency, much like [Quora](https://www.quora.com/). 
 
+
+# License
+The [License](LICENSE) is the [Public Source, No Redistrubution License](https://psnrlicense.org/)
+
+This means that everyone is free to make changes and self-host for OWN use, but all public facing hosted version, will be authorized by the repository owner (Carsten Jørgensen).
+
+Pull Requests and contributions are always welcome, but all code, from both repository owner, and contributers will be subject to the above mentioned license.
+
+Content published on the site WILL be published in the public domain, this includes recipes, images, and anything that is not explictly marked as not public domain.  
+Therefore make sure that if you are copying a recipe that the rights are in order for it to be published under public domain.
+
 # Frontend
 The frontend cosists of Svelte with TypeScript and SCSS.
 
