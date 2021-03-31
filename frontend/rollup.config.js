@@ -6,7 +6,11 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
+import alias from "@rollup/plugin-alias";
+import copy from "rollup-plugin-copy";
 
+
+const pages = ["", "/recipes", "/search"];
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -30,54 +34,77 @@ function serve() {
 	};
 }
 
-export default {
-	input: 'src/main.ts',
-	output: {
-		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/build/bundle.js'
-	},
-	plugins: [
-		svelte({
-			preprocess: sveltePreprocess({ sourceMap: !production }),
-			compilerOptions: {
-				// enable run-time checks when not in production
-				dev: !production
-			}
-		}),
-		// we'll extract any component CSS out into
-		// a separate file - better for performance
-		css({ output: 'bundle.css' }),
-
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration -
-		// consult the documentation for details:
-		// https://github.com/rollup/plugins/tree/master/packages/commonjs
-		resolve({
-			browser: true,
-			dedupe: ['svelte']
-		}),
-		commonjs(),
-		typescript({
-			sourceMap: !production,
-			inlineSources: !production
-		}),
-
-		// In dev mode, call `npm run start` once
-		// the bundle has been generated
-		!production && serve(),
-
-		// Watch the `public` directory and refresh the
-		// browser on changes when not in production
-		!production && livereload('public'),
-
-		// If we're building for production (npm run build
-		// instead of npm run dev), minify
-		production && terser()
-	],
-	watch: {
-		clearScreen: false
+const common = function (dir, page) {
+	let isRoot = page === "";
+	return {
+		input: `src${isRoot ? "" : "/pages"}${page}/main.ts`,
+		output: {
+			sourcemap: true,
+			format: 'iife',
+			name: 'app',
+			file: dir + page + "/bundle.js"
+		},
+		plugins: [
+			copy({
+				targets: [
+				  { src: "src/index.html", dest: dir + page },
+				  { src: "src/global.css", dest: dir + page },
+				],
+			}),
+			svelte({
+				preprocess: sveltePreprocess({ sourceMap: !production }),
+				compilerOptions: {
+					// enable run-time checks when not in production
+					dev: !production
+				}
+			}),
+			alias({
+				entries: [
+					// If you add a new top-level-folder besides src which you want to use, add it here
+					{ find: /^src(\/|$)/, replacement: `${__dirname}/src/` },
+				],
+			}),
+			// we'll extract any component CSS out into
+			// a separate file - better for performance
+			css({ output: 'bundle.css' }),
+			
+			// If you have external dependencies installed from
+			// npm, you'll most likely need these plugins. In
+			// some cases you'll need additional configuration -
+			// consult the documentation for details:
+			// https://github.com/rollup/plugins/tree/master/packages/commonjs
+			resolve({
+				browser: true,
+				dedupe: ['svelte']
+			}),
+			commonjs(),
+			typescript({
+				sourceMap: !production,
+				inlineSources: !production
+			}),
+			
+			// In dev mode, call `npm run start` once
+			// the bundle has been generated
+			//!production && serve(),
+			
+			// Watch the `public` directory and refresh the
+			// browser on changes when not in production
+			!production && livereload('public'),
+			
+			// If we're building for production (npm run build
+			// instead of npm run dev), minify
+			production && terser()
+		],
+		watch: {
+			clearScreen: false
+		}
 	}
 };
+
+const exp = (function () {
+	var ret = [];
+	pages.forEach((folder) => ret.push(common("public", folder)));
+	return ret;
+})();
+
+export default exp;
