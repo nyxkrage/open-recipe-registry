@@ -8,9 +8,14 @@ import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 import alias from "@rollup/plugin-alias";
 import copy from "rollup-plugin-copy";
+const { readdirSync } = require('fs')
 
+const getDirectories = source =>
+  readdirSync(source, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name.replace(__dirname, ""))
 
-const pages = ["", "/recipes", "/search"];
+const pages = getDirectories(__dirname + "/src/pages").concat([""]);
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -37,7 +42,7 @@ function serve() {
 const common = function (dir, page) {
 	let isRoot = page === "";
 	return {
-		input: `src${isRoot ? "" : "/pages"}${page}/main.ts`,
+		input: `src${isRoot ? "" : "/pages/"}${page}/main.ts`,
 		output: {
 			sourcemap: true,
 			format: 'iife',
@@ -103,7 +108,7 @@ const common = function (dir, page) {
 
 const exp = (function () {
 	var ret = [];
-	pages.forEach((folder) => ret.push(common("public", folder)));
+	pages.forEach((folder) => ret.push(common("public/", folder)));
 	return ret;
 })();
 
