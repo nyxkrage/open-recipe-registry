@@ -2,8 +2,7 @@
 Thumbs.db
 node_modules/
 *.log
-public/
-
+build/
 debug/
 target/
 **/*.rs.bk
