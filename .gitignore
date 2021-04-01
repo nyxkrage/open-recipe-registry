@@ -2,9 +2,8 @@
 Thumbs.db
 node_modules/
 *.log
-bundle.*
-frontend/public/*/
-frontend/public/index.html
+build
+frontend/public/*.html
 debug/
 target/
 **/*.rs.bk
