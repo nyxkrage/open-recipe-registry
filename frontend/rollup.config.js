@@ -90,11 +90,11 @@ const common = function (dir, page) {
 			
 			// In dev mode, call `npm run start` once
 			// the bundle has been generated
-			//!production && serve(),
-			
+			page === "" && !production && serve(),
+				
 			// Watch the `public` directory and refresh the
 			// browser on changes when not in production
-			!production && livereload('public'),
+			page === "" && !production && livereload('public'),
 			
 			// If we're building for production (npm run build
 			// instead of npm run dev), minify
@@ -106,10 +106,6 @@ const common = function (dir, page) {
 	}
 };
 
-const exp = (function () {
-	var ret = [];
-	pages.forEach((folder) => ret.push(common("public/", folder)));
-	return ret;
-})();
+const exp = pages.map((folder) => common("public/", folder));
 
 export default exp;
