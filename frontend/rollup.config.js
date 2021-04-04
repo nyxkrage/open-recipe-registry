@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
-import copy from 'rollup-plugin-copy'
+import copy from 'rollup-plugin-copy';
 import alias from '@rollup/plugin-alias';
 import { readdirSync } from 'fs';
 
